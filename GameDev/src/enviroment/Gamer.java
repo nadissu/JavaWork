@@ -4,14 +4,14 @@ public class Gamer implements EntityBase{
 	private int gamerid;
 	private String firstName;
 	private String lastName;
-	private String nationalIdentity;
-	private String birthday;
+	private long nationalIdentity;
+	private int birthday;
 	
 	public Gamer() {
 		
 	}
 
-	public Gamer(int gamerid, String firstName, String lastName, String nationalIdentity, String birthday) {
+	public Gamer(int gamerid, String firstName, String lastName, long nationalIdentity, int birthday) {
 		super();
 		this.gamerid = gamerid;
 		this.firstName = firstName;
@@ -44,19 +44,19 @@ public class Gamer implements EntityBase{
 		this.lastName = lastName;
 	}
 
-	public String getNationalIdentity() {
+	public long getNationalIdentity() {
 		return nationalIdentity;
 	}
 
-	public void setNationalIdentity(String nationalIdentity) {
+	public void setNationalIdentity(long nationalIdentity) {
 		this.nationalIdentity = nationalIdentity;
 	}
 
-	public String getBirthday() {
+	public int getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(String birthday) {
+	public void setBirthday(int birthday) {
 		this.birthday = birthday;
 	}
 	

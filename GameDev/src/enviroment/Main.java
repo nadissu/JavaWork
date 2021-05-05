@@ -1,14 +1,16 @@
 package enviroment;
 
+import java.rmi.RemoteException;
+
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Gamer gamer=new Gamer();
 		gamer.setId(1);
-		gamer.setNationalIdentity("0000000000");
-		gamer.setFirstName("Nadide");
+		gamer.setNationalIdentity(20786013636L);
+		gamer.setFirstName("Nadide Sultan");
 		gamer.setLastName("Sığırtmaç");
-		gamer.setBirthday("03.09.1997");
+		gamer.setBirthday(1997);
 		
 	
 		

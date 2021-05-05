@@ -1,5 +1,7 @@
 package enviroment;
 
+import java.rmi.RemoteException;
+
 public class GamerManager implements GamerServices{
 	AuthorServices authorServices;
 	public GamerManager(AuthorServices authorServices) {
@@ -8,15 +10,13 @@ public class GamerManager implements GamerServices{
 
 
 	@Override
-	public void register(Gamer gamer) {
-		if (authorServices.verify(gamer.getNationalIdentity(),gamer.getFirstName(),gamer.getLastName(),gamer.getBirthday())) 
-		{
-			System.out.println("Giriş Başarılı");
+	public void register(Gamer gamer) throws Exception {
+		if (authorServices.validate(gamer)) {
+			System.out.println("Doğrulama Başarılı");
 			
-		} else {
-			System.out.println("Kullanıcı doğrulanmadığı için eklenmedi...");
+		}else {
+			throw new Exception();
 		}
-		
 	}
 
 	@Override
