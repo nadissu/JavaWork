@@ -6,25 +6,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import HMRS.hmrs.business.abstracts.JobTitleService;
+import HMRS.hmrs.core.utilities.DataResult;
+import HMRS.hmrs.core.utilities.ErrorResult;
+import HMRS.hmrs.core.utilities.Result;
+import HMRS.hmrs.core.utilities.SuccessDataResult;
+import HMRS.hmrs.core.utilities.SuccessResult;
 import HMRS.hmrs.dataAccess.abstracts.JobTitleDao;
 import HMRS.hmrs.entities.concretes.JobTitle;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Service
-public class JobTitleManager implements JobTitleService{
-	private JobTitleDao jobTitleDao;
+public class JobTitleManager implements JobTitleService {
 	
 	@Autowired
-	public JobTitleManager(JobTitleDao jobTitleDao) {
-		super();
-		this.jobTitleDao = jobTitleDao;
-	}
-
-	
+	private JobTitleDao jobTitleDao;
+	JobTitle jobTitleDb = new JobTitle();
 
 	@Override
-	public List<JobTitle> getAll() {
+	public DataResult<List<JobTitle>> getAll() {
+		return new SuccessDataResult<List<JobTitle>>("Job Titles are Listed.", this.jobTitleDao.findAll());
+	}
+
+
+	@Override
+	public Result add(JobTitle jobTitle) {
+		this.jobTitleDao.save(jobTitle);
+		return new SuccessResult("Job Title is Added.");
+	}
+	
+	@Override
+	public Result update(int id, JobTitle jobTitle) {
+		jobTitleDb = jobTitleDao.getOne(id);
+		if(jobTitleDb == null) {
+			return new ErrorResult("Job Title Does not Exist");
+		}
 		
-		return this.jobTitleDao.findAll();
+		jobTitleDb.setId(jobTitle.getId());
+		jobTitleDb.setTitle(jobTitle.getTitle());
+		
+		jobTitleDao.save(jobTitleDb);
+		
+		return new SuccessResult("Job Title is Updated");
+	}
+
+
+	@Override
+	public Result delete(int id) {
+		if(jobTitleDb == null) {
+			return new ErrorResult("Id of Job Title is Null");
+		}
+		
+		jobTitleDao.deleteById(id);
+
+		return new SuccessResult("Job Title is Deleted");
 	}
 
 }

@@ -26,7 +26,7 @@ public class SwaggerConfig {
 	    return new ApiInfo(
 	      "HRMS API Reference", 
 	      null, null, null, 
-	      new Contact("Ismail Artun", "https://nadissu.github.io/", "ismailartun00@gmail.com"), 
+	      new Contact("Nadide", "https://github.com/nadissu", "nadidesigirtmac@gmail.com"), 
 	      null, null, Collections.emptyList());
 	}
 }
