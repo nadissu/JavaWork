@@ -17,7 +17,7 @@ import HMRS.hmrs.entities.abstracts.User;
 @AllArgsConstructor
 @Table(name="employers")
 @EqualsAndHashCode(callSuper = false)
-@PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")
+@PrimaryKeyJoinColumn(name = "id")
 public class Employer extends User {
 
 	private static final long serialVersionUID = 1L;

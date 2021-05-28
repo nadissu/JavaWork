@@ -1,12 +1,12 @@
 package  HMRS.hmrs.business.concretes;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import HMRS.hmrs.adapters.MernisServiceAdapter;
 import HMRS.hmrs.business.abstracts.CandidateService;
 import HMRS.hmrs.core.utilities.DataResult;
 import HMRS.hmrs.core.utilities.ErrorDataResult;
@@ -17,8 +17,6 @@ import HMRS.hmrs.core.utilities.SuccessResult;
 import HMRS.hmrs.dataAccess.abstracts.CandidateDao;
 import HMRS.hmrs.entities.concretes.Candidate;
 import lombok.NoArgsConstructor;
-import tr.gov.nvi.tckimlik.WS.KPSPublicSoap;
-import tr.gov.nvi.tckimlik.WS.KPSPublicSoapProxy;
 
 @NoArgsConstructor
 @Service
@@ -27,6 +25,7 @@ public class CandidateManager implements CandidateService {
 	@Autowired
 	private CandidateDao candidateDao;
 	Candidate candidateDb = new Candidate();
+	MernisServiceAdapter mernisServiceAdapter=new MernisServiceAdapter();
 	
 
 	@Override
@@ -45,20 +44,12 @@ public class CandidateManager implements CandidateService {
 
 
 	@Override
-	public Result add(Candidate candidate) throws RemoteException {
-
+	public Result add(Candidate candidate) {
 		if (!this.hasEmptyField(candidate)) {
 			return new ErrorResult("Tüm alanlar zorunludur.");
-//		} else if (!this.candidateValidationService.isRealPerson(candidate)) {
-//			return new ErrorResult("Sahte iş arayan!");
-//		} else if (this.existsCandidateByIdentityNumber(candidate.getIdentityNumber())) {
-//			return new ErrorResult("Bu kimlik numaralı bir iş arayan mevcuttur.");
-//		} else if (!this.candidateEmailRegexValidatorService.isValidEmail(candidate.getEmailAddress())) {
-//			return new ErrorResult("Email geçerli değil!");
-//		} else if (this.existsCandidateByEmail(candidate.getEmailAddress())) {
-//			return new ErrorResult("Bu email'e sahip bir iş arayan mevcuttur.");
-//		} else if (!this.candidateEmailVerifyService.hasVerifyEmail(candidate.getEmailAddress())) {
-//			return new ErrorResult("Email doğrulanmadı!");
+		} else if(!this.mernisValidate (candidate.getIdentityNumber(), candidate.getFirstName(), candidate.getLastName(), candidate.getBirthOfDate().getYear())){
+
+            return new ErrorResult("Kimlik doğrulaması başarısız.");
 		} else {
 			this.candidateDao.save(candidate);
 			return new SuccessResult("iş arayan başarıyla kaydedildi.");
@@ -93,12 +84,24 @@ public class CandidateManager implements CandidateService {
 	public boolean existsCandidateByEmailAddress(String emailAddress) {
 		return this.candidateDao.existsCandidateByEmailAddress(emailAddress);
 	}
+	
+	/* 
+	 * KPSPublicSoap kpsPublicSoap= new KPSPublicSoapProxy();
+	 * return kpsPublicSoap.TCKimlikNoDogrula(candidate.getIdentityNumber(), candidate.getFirstName().toUpperCase(), candidate.getLastName().toUpperCase(), candidate.getBirthOfDate());
+	
+	 */
 
 	@Override
-	public boolean hasEmptyField(Candidate candidate) throws RemoteException {
-		KPSPublicSoap kpsPublicSoap= new KPSPublicSoapProxy();
-		return kpsPublicSoap.TCKimlikNoDogrula(candidate.getIdentityNumber(), candidate.getFirstName().toUpperCase(), candidate.getLastName().toUpperCase(), candidate.getBirthOfDate());
-	
+	public boolean hasEmptyField(Candidate candidate) {
+//		if (candidate.getFirstName().isEmpty() || candidate.getLastName().isEmpty() || candidate.getBirthOfDate() || candidate.getEmailAddress().isEmpty() 
+//				|| candidate.getIdentityNumber().isEmpty() || candidate.getPassword().isEmpty()) {
+//			return false;
+//		} else {
+			return true;
+		}
+	private boolean mernisValidate(String tckNo,String firstName, String lastName, int yearOfDate) {
+        return true;
+    }
 	}
 
-}
+

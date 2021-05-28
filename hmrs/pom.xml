@@ -62,6 +62,18 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency>
+		<dependency>
+    <groupId>axis</groupId>
+    <artifactId>axis</artifactId>
+    <version>1.4</version>
+    <scope>compile</scope>
+</dependency>
+<dependency>
+    <groupId>axis</groupId>
+    <artifactId>axis-wsdl4j</artifactId>
+    <version>1.5.1</version>
+    <scope>compile</scope>
+</dependency>
 	</dependencies>
 
 	<build>

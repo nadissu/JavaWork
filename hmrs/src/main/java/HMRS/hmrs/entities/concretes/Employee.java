@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "employees")
 @EqualsAndHashCode(callSuper = false)
-@PrimaryKeyJoinColumn(name = "user_id",referencedColumnName = "id")
+@PrimaryKeyJoinColumn(name = "id")
 public class Employee extends User {
 
 	private static final long serialVersionUID = 1L;

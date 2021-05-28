@@ -43,10 +43,11 @@ public class CandidatesController {
 	
 	@PostMapping("/")
 	@ApiOperation(value = "Candidate Add Operation", response = Candidate.class)
-	public Result add(@RequestBody Candidate candidate) throws RemoteException {
+	public Result add( @RequestBody Candidate candidate) throws RemoteException {
 		
 		return this.candidateService.add(candidate);
 	}
+	
 	
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Candidate Update Operation", response = Candidate.class)

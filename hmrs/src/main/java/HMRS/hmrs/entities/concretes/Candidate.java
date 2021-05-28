@@ -1,6 +1,8 @@
 package HMRS.hmrs.entities.concretes;
 
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name="candidates")
 @EqualsAndHashCode(callSuper = false)
-@PrimaryKeyJoinColumn(name = "user_id",referencedColumnName = "id")
+@PrimaryKeyJoinColumn(name = "id")
 public class Candidate  extends User{	
 	
 	private static final long serialVersionUID = 1L;
@@ -32,12 +34,12 @@ public class Candidate  extends User{
 	private String lastName;
 	
 	@Column(name="identification_number", nullable = false, unique = true)
-	private Long identityNumber;
+	private String identityNumber;
 	
 	@Column(name="birth_date", nullable = false)
-	private int  birthOfDate;
+	private LocalDate  birthOfDate;
 	
-	public Candidate(int id, String emailAddress, String password, String firstName, String lastName, Long identityNumber, int birthOfDate) {
+	public Candidate(int id, String emailAddress, String password, String firstName, String lastName, String identityNumber, LocalDate birthOfDate) {
     	super(id, emailAddress, password);
     	this.firstName = firstName;
     	this.lastName = lastName;
@@ -45,7 +47,7 @@ public class Candidate  extends User{
     	this.birthOfDate = birthOfDate;
     }
 
-	public Candidate(String emailAddress, String password, String firstName, String lastName, Long identityNumber, int birthOfDate) {
+	public Candidate(String emailAddress, String password, String firstName, String lastName, String identityNumber, LocalDate birthOfDate) {
     	super(emailAddress, password);
     	this.firstName = firstName;
     	this.lastName = lastName;
