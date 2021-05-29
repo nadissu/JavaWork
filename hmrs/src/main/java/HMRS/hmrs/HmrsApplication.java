@@ -10,4 +10,5 @@ public class HmrsApplication {
 		SpringApplication.run(HmrsApplication.class, args);
 	}
 
+
 }

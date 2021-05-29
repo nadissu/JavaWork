@@ -6,14 +6,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import HMRS.hmrs.adapters.MernisServiceAdapter;
 import HMRS.hmrs.business.abstracts.CandidateService;
-import HMRS.hmrs.core.utilities.DataResult;
-import HMRS.hmrs.core.utilities.ErrorDataResult;
-import HMRS.hmrs.core.utilities.ErrorResult;
-import HMRS.hmrs.core.utilities.Result;
-import HMRS.hmrs.core.utilities.SuccessDataResult;
-import HMRS.hmrs.core.utilities.SuccessResult;
+import HMRS.hmrs.core.adapters.abstracts.MernisServiceAdapter;
+import HMRS.hmrs.core.utilities.constants.EnglishMessages;
+import HMRS.hmrs.core.utilities.results.DataResult;
+import HMRS.hmrs.core.utilities.results.ErrorDataResult;
+import HMRS.hmrs.core.utilities.results.ErrorResult;
+import HMRS.hmrs.core.utilities.results.Result;
+import HMRS.hmrs.core.utilities.results.SuccessDataResult;
+import HMRS.hmrs.core.utilities.results.SuccessResult;
+import HMRS.hmrs.core.validators.CandidateValidator;
 import HMRS.hmrs.dataAccess.abstracts.CandidateDao;
 import HMRS.hmrs.entities.concretes.Candidate;
 import lombok.NoArgsConstructor;
@@ -22,21 +24,28 @@ import lombok.NoArgsConstructor;
 @Service
 public class CandidateManager implements CandidateService {
 	
-	@Autowired
 	private CandidateDao candidateDao;
-	Candidate candidateDb = new Candidate();
-	MernisServiceAdapter mernisServiceAdapter=new MernisServiceAdapter();
+	private MernisServiceAdapter mernisServiceAdapter;
+	private CandidateValidator candidateValidator;
+	
+	@Autowired
+	public CandidateManager(CandidateDao candidateDao, MernisServiceAdapter mernisServiceAdapter) {
+		super();
+		this.candidateDao = candidateDao;
+		this.mernisServiceAdapter = mernisServiceAdapter;
+	}
 	
 
 	@Override
 	public DataResult<List<Candidate>> getAll() {
-		return new SuccessDataResult<List<Candidate>>("Candidate are Listed", this.candidateDao.findAll());
+		return new SuccessDataResult<List<Candidate>>(this.candidateDao.findAll(), EnglishMessages.JOB_SEEKER_SUCCESS_DATA_LISTED);
 	}
+	
 	
 	@Override
 	public DataResult<Candidate> getById(int id) {
 		if (this.candidateDao.findById(id).orElse(null) != null ) {
-			return new SuccessDataResult<Candidate>("The id already existed", this.candidateDao.findById(id).get());
+			return new SuccessDataResult<Candidate>(this.candidateDao.findById(id).get(), "The id already existed");
 		} else {
 			return new ErrorDataResult<Candidate>("The id did not exist.");
 		}
@@ -45,15 +54,13 @@ public class CandidateManager implements CandidateService {
 
 	@Override
 	public Result add(Candidate candidate) {
-		if (!this.hasEmptyField(candidate)) {
-			return new ErrorResult("Tüm alanlar zorunludur.");
-		} else if(!this.mernisValidate (candidate.getIdentityNumber(), candidate.getFirstName(), candidate.getLastName(), candidate.getBirthOfDate().getYear())){
-
-            return new ErrorResult("Kimlik doğrulaması başarısız.");
-		} else {
-			this.candidateDao.save(candidate);
-			return new SuccessResult("iş arayan başarıyla kaydedildi.");
-		}
+		this.candidateValidator = new CandidateValidator(candidate, candidateDao, mernisServiceAdapter);
+		Result result = candidateValidator.isValid();
+		if( result instanceof ErrorResult)
+			return result;
+		
+		this.candidateDao.save(candidate);
+		return new SuccessResult(EnglishMessages.JOB_SEEKER_SUCCESS_ADDED);
 	}
 
 
@@ -66,6 +73,7 @@ public class CandidateManager implements CandidateService {
 		return new SuccessResult("Candidate is Updated");
 	}
 	
+	
 	@Override
 	public Result delete(int id) {
 		if(candidateDao.getOne(id) == null) {
@@ -75,33 +83,18 @@ public class CandidateManager implements CandidateService {
 		return new SuccessResult("Candidate is Deleted");
 	}
 	
+	
 	@Override
-	public boolean existsCandidateByIdentityNumber(String identityNumber) {
-		return this.candidateDao.existsCandidateByIdentityNumber(identityNumber);
+	public boolean existsByIdentityNumber(String identityNumber) {
+		return this.candidateDao.existsByIdentityNumber(identityNumber);
 	}
 
+	
 	@Override
-	public boolean existsCandidateByEmailAddress(String emailAddress) {
-		return this.candidateDao.existsCandidateByEmailAddress(emailAddress);
+	public boolean existsByEmailAddress(String emailAddress) {
+		return this.candidateDao.existsByEmailAddress(emailAddress);
 	}
-	
-	/* 
-	 * KPSPublicSoap kpsPublicSoap= new KPSPublicSoapProxy();
-	 * return kpsPublicSoap.TCKimlikNoDogrula(candidate.getIdentityNumber(), candidate.getFirstName().toUpperCase(), candidate.getLastName().toUpperCase(), candidate.getBirthOfDate());
-	
-	 */
 
-	@Override
-	public boolean hasEmptyField(Candidate candidate) {
-//		if (candidate.getFirstName().isEmpty() || candidate.getLastName().isEmpty() || candidate.getBirthOfDate() || candidate.getEmailAddress().isEmpty() 
-//				|| candidate.getIdentityNumber().isEmpty() || candidate.getPassword().isEmpty()) {
-//			return false;
-//		} else {
-			return true;
-		}
-	private boolean mernisValidate(String tckNo,String firstName, String lastName, int yearOfDate) {
-        return true;
-    }
-	}
+}
 
 

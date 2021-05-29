@@ -1,6 +1,5 @@
 package HMRS.hmrs.api.controllers;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import HMRS.hmrs.business.abstracts.CandidateService;
-import HMRS.hmrs.core.utilities.DataResult;
-import HMRS.hmrs.core.utilities.Result;
-import HMRS.hmrs.core.utilities.ApiPaths;
+import HMRS.hmrs.core.utilities.constants.ApiPaths;
+import HMRS.hmrs.core.utilities.results.DataResult;
+import HMRS.hmrs.core.utilities.results.Result;
 import HMRS.hmrs.entities.concretes.Candidate;
 
 @RestController
@@ -32,6 +31,7 @@ public class CandidatesController {
 	
 	@Autowired
 	public CandidatesController(CandidateService candidateService) {
+		super();
 		this.candidateService = candidateService;
 	}
 	
@@ -43,11 +43,10 @@ public class CandidatesController {
 	
 	@PostMapping("/")
 	@ApiOperation(value = "Candidate Add Operation", response = Candidate.class)
-	public Result add( @RequestBody Candidate candidate) throws RemoteException {
-		
+	public Result add( @RequestBody Candidate candidate) {
 		return this.candidateService.add(candidate);
 	}
-	
+
 	
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Candidate Update Operation", response = Candidate.class)

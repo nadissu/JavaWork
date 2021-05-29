@@ -8,6 +8,6 @@ import HMRS.hmrs.entities.concretes.Candidate;
 
 @Repository
 public interface CandidateDao extends JpaRepository<Candidate, Integer> {
-	boolean existsCandidateByIdentityNumber(String identityNumber);
-	boolean existsCandidateByEmailAddress(String emailAddress);
+	boolean existsByIdentityNumber(String identityNumber);
+	boolean existsByEmailAddress(String emailAddress);
 }

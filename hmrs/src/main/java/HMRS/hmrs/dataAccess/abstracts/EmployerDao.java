@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import HMRS.hmrs.entities.concretes.Employer;
 @Repository
 public interface EmployerDao extends JpaRepository<Employer, Integer> {
-	boolean existsEmployerByEmailAddress(String emailAddress);
+	boolean existsByEmailAddress(String emailAddress);
+	Employer getByCompanyName(String companyName);
 }
