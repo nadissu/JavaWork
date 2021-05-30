@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class CandidateManager implements CandidateService {
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private final CandidateDao candidateDao;
 //	private final MernisServiceAdapter mernisServiceAdapter;
 //	private  CandidateValidator candidateValidator;
@@ -32,6 +33,8 @@ public class CandidateManager implements CandidateService {
 
 
 =======
+=======
+>>>>>>> parent of 1292c57 (Validators,Son Ödev İsterler Eklendi,Ufak bir hata var)
 	@Autowired
 	private CandidateDao candidateDao;
 	Candidate candidateDb = new Candidate();
@@ -57,6 +60,7 @@ public class CandidateManager implements CandidateService {
 	@Override
 	public Result add(Candidate candidate) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 //		this.candidateValidator = new CandidateValidator(candidate, candidateDao, mernisServiceAdapter);
 //		Result result = candidateValidator.isValid();
 //		if( result instanceof ErrorResult)
@@ -65,6 +69,8 @@ public class CandidateManager implements CandidateService {
 		this.candidateDao.save(candidate);
 		return new SuccessResult(EnglishMessages.JOB_SEEKER_SUCCESS_ADDED);
 =======
+=======
+>>>>>>> parent of 1292c57 (Validators,Son Ödev İsterler Eklendi,Ufak bir hata var)
 		if (!this.hasEmptyField(candidate)) {
 			return new ErrorResult("Tüm alanlar zorunludur.");
 		} else if(!this.mernisValidate (candidate.getIdentityNumber(), candidate.getFirstName(), candidate.getLastName(), candidate.getBirthOfDate().getYear())){
@@ -74,6 +80,9 @@ public class CandidateManager implements CandidateService {
 			this.candidateDao.save(candidate);
 			return new SuccessResult("iş arayan başarıyla kaydedildi.");
 		}
+<<<<<<< HEAD
+>>>>>>> parent of 1292c57 (Validators,Son Ödev İsterler Eklendi,Ufak bir hata var)
+=======
 >>>>>>> parent of 1292c57 (Validators,Son Ödev İsterler Eklendi,Ufak bir hata var)
 	}
 
