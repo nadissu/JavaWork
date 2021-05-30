@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import HMRS.hmrs.business.abstracts.JobTitleService;
-import HMRS.hmrs.core.utilities.constants.ApiPaths;
-import HMRS.hmrs.core.utilities.results.DataResult;
-import HMRS.hmrs.core.utilities.results.Result;
+import HMRS.hmrs.core.utilities.ApiPaths;
+import HMRS.hmrs.core.utilities.DataResult;
+import HMRS.hmrs.core.utilities.Result;
 import HMRS.hmrs.entities.concretes.JobTitle;
 
 @RestController

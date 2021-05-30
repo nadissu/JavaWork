@@ -7,13 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import HMRS.hmrs.business.abstracts.EmployeeService;
-import HMRS.hmrs.core.utilities.constants.EnglishMessages;
-import HMRS.hmrs.core.utilities.results.DataResult;
-import HMRS.hmrs.core.utilities.results.ErrorDataResult;
-import HMRS.hmrs.core.utilities.results.ErrorResult;
-import HMRS.hmrs.core.utilities.results.Result;
-import HMRS.hmrs.core.utilities.results.SuccessDataResult;
-import HMRS.hmrs.core.utilities.results.SuccessResult;
+import HMRS.hmrs.core.utilities.DataResult;
+import HMRS.hmrs.core.utilities.ErrorDataResult;
+import HMRS.hmrs.core.utilities.ErrorResult;
+import HMRS.hmrs.core.utilities.Result;
+import HMRS.hmrs.core.utilities.SuccessDataResult;
+import HMRS.hmrs.core.utilities.SuccessResult;
 import HMRS.hmrs.dataAccess.abstracts.EmployeeDao;
 import HMRS.hmrs.entities.concretes.Employee;
 import lombok.NoArgsConstructor;
@@ -29,13 +28,13 @@ public class EmployeeManager implements EmployeeService {
 
 	@Override
 	public DataResult<List<Employee>> getAll() {
-		return new SuccessDataResult<List<Employee>>(this.employeeDao.findAll(), "Employee are Listed");
+		return new SuccessDataResult<List<Employee>>("Employee are Listed", this.employeeDao.findAll());
 	}
 	
 	@Override
 	public DataResult<Employee> getById(int id) {
 		if (this.employeeDao.findById(id).orElse(null) != null ) {
-			return new SuccessDataResult<Employee>(this.employeeDao.findById(id).get(), "Belirtilen sistem çalışanı başarıyla bulundu.");
+			return new SuccessDataResult<Employee>("Belirtilen sistem çalışanı başarıyla bulundu.", this.employeeDao.findById(id).get());
 		} else {
 			return new ErrorDataResult<Employee>("Belirtilen sistem çalışanı mevcut değildir.");
 		}
@@ -44,7 +43,7 @@ public class EmployeeManager implements EmployeeService {
 	@Override
 	public Result add(Employee employee) {
 		this.employeeDao.save(employee);
-		return new SuccessResult(EnglishMessages.EMPLOYER_SUCCESS_ADDED);
+		return new SuccessResult("User is Added");
 	}
 
 	@Override

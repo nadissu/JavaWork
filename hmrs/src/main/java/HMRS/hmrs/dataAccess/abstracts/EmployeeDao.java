@@ -4,10 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import HMRS.hmrs.entities.concretes.Employee;
-import HMRS.hmrs.entities.concretes.Employer;
 
 @Repository
 public interface EmployeeDao extends JpaRepository<Employee, Integer> {
 	boolean existsEmployeeByEmailAddress(String emailAddress);
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 1292c57 (Validators,Son Ödev İsterler Eklendi,Ufak bir hata var)
 }

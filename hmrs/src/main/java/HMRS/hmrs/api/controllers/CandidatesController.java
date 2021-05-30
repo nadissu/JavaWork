@@ -1,5 +1,6 @@
 package HMRS.hmrs.api.controllers;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 
@@ -19,9 +20,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import HMRS.hmrs.business.abstracts.CandidateService;
-import HMRS.hmrs.core.utilities.constants.ApiPaths;
-import HMRS.hmrs.core.utilities.results.DataResult;
-import HMRS.hmrs.core.utilities.results.Result;
+import HMRS.hmrs.core.utilities.DataResult;
+import HMRS.hmrs.core.utilities.Result;
+import HMRS.hmrs.core.utilities.ApiPaths;
 import HMRS.hmrs.entities.concretes.Candidate;
 @RequiredArgsConstructor
 @RestController
@@ -31,6 +32,13 @@ public class CandidatesController {
 	
 	private final CandidateService candidateService;
 	
+<<<<<<< HEAD
+=======
+	@Autowired
+	public CandidatesController(CandidateService candidateService) {
+		this.candidateService = candidateService;
+	}
+>>>>>>> parent of 1292c57 (Validators,Son Ödev İsterler Eklendi,Ufak bir hata var)
 	
 	@GetMapping("/getall")
 	@ApiOperation(value = "Candidate Get All Operation", response = Candidate.class)
@@ -40,10 +48,11 @@ public class CandidatesController {
 	
 	@PostMapping("/")
 	@ApiOperation(value = "Candidate Add Operation", response = Candidate.class)
-	public Result add( @RequestBody Candidate candidate) {
+	public Result add( @RequestBody Candidate candidate) throws RemoteException {
+		
 		return this.candidateService.add(candidate);
 	}
-
+	
 	
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Candidate Update Operation", response = Candidate.class)

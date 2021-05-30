@@ -1,4 +1,4 @@
-package HMRS.hmrs.core.utilities.constants;
+package HMRS.hmrs.core.utilities;
 
 public class ApiPaths {
 	
@@ -20,8 +20,5 @@ public class ApiPaths {
 	}
 	public static final class EmployeeCtrl{
 		public static final String CTRL = BASE_PATH + "/employees";
-	}
-	public static final class JobAdvertisementCtrl{
-		public static final String CTRL = BASE_PATH + "/jobadvertisements";
 	}
 }

@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import HMRS.hmrs.business.abstracts.JobTitleService;
-import HMRS.hmrs.core.utilities.results.DataResult;
-import HMRS.hmrs.core.utilities.results.ErrorResult;
-import HMRS.hmrs.core.utilities.results.Result;
-import HMRS.hmrs.core.utilities.results.SuccessDataResult;
-import HMRS.hmrs.core.utilities.results.SuccessResult;
+import HMRS.hmrs.core.utilities.DataResult;
+import HMRS.hmrs.core.utilities.ErrorResult;
+import HMRS.hmrs.core.utilities.Result;
+import HMRS.hmrs.core.utilities.SuccessDataResult;
+import HMRS.hmrs.core.utilities.SuccessResult;
 import HMRS.hmrs.dataAccess.abstracts.JobTitleDao;
 import HMRS.hmrs.entities.concretes.JobTitle;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public class JobTitleManager implements JobTitleService {
 
 	@Override
 	public DataResult<List<JobTitle>> getAll() {
-		return new SuccessDataResult<List<JobTitle>>(this.jobTitleDao.findAll(), "Job Titles are Listed.");
+		return new SuccessDataResult<List<JobTitle>>("Job Titles are Listed.", this.jobTitleDao.findAll());
 	}
 
 

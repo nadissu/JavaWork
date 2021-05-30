@@ -6,16 +6,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import HMRS.hmrs.adapters.MernisServiceAdapter;
 import HMRS.hmrs.business.abstracts.CandidateService;
-import HMRS.hmrs.core.adapters.abstracts.MernisServiceAdapter;
-import HMRS.hmrs.core.utilities.constants.EnglishMessages;
-import HMRS.hmrs.core.utilities.results.DataResult;
-import HMRS.hmrs.core.utilities.results.ErrorDataResult;
-import HMRS.hmrs.core.utilities.results.ErrorResult;
-import HMRS.hmrs.core.utilities.results.Result;
-import HMRS.hmrs.core.utilities.results.SuccessDataResult;
-import HMRS.hmrs.core.utilities.results.SuccessResult;
-import HMRS.hmrs.core.validators.CandidateValidator;
+import HMRS.hmrs.core.utilities.DataResult;
+import HMRS.hmrs.core.utilities.ErrorDataResult;
+import HMRS.hmrs.core.utilities.ErrorResult;
+import HMRS.hmrs.core.utilities.Result;
+import HMRS.hmrs.core.utilities.SuccessDataResult;
+import HMRS.hmrs.core.utilities.SuccessResult;
 import HMRS.hmrs.dataAccess.abstracts.CandidateDao;
 import HMRS.hmrs.entities.concretes.Candidate;
 import lombok.NoArgsConstructor;
@@ -26,23 +24,30 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CandidateManager implements CandidateService {
 	
+<<<<<<< HEAD
 	private final CandidateDao candidateDao;
 //	private final MernisServiceAdapter mernisServiceAdapter;
 //	private  CandidateValidator candidateValidator;
 //	
 
 
+=======
+	@Autowired
+	private CandidateDao candidateDao;
+	Candidate candidateDb = new Candidate();
+	MernisServiceAdapter mernisServiceAdapter=new MernisServiceAdapter();
+	
+>>>>>>> parent of 1292c57 (Validators,Son Ödev İsterler Eklendi,Ufak bir hata var)
 
 	@Override
 	public DataResult<List<Candidate>> getAll() {
-		return new SuccessDataResult<List<Candidate>>(this.candidateDao.findAll(), EnglishMessages.JOB_SEEKER_SUCCESS_DATA_LISTED);
+		return new SuccessDataResult<List<Candidate>>("Candidate are Listed", this.candidateDao.findAll());
 	}
-	
 	
 	@Override
 	public DataResult<Candidate> getById(int id) {
 		if (this.candidateDao.findById(id).orElse(null) != null ) {
-			return new SuccessDataResult<Candidate>(this.candidateDao.findById(id).get(), "The id already existed");
+			return new SuccessDataResult<Candidate>("The id already existed", this.candidateDao.findById(id).get());
 		} else {
 			return new ErrorDataResult<Candidate>("The id did not exist.");
 		}
@@ -51,6 +56,7 @@ public class CandidateManager implements CandidateService {
 
 	@Override
 	public Result add(Candidate candidate) {
+<<<<<<< HEAD
 //		this.candidateValidator = new CandidateValidator(candidate, candidateDao, mernisServiceAdapter);
 //		Result result = candidateValidator.isValid();
 //		if( result instanceof ErrorResult)
@@ -58,6 +64,17 @@ public class CandidateManager implements CandidateService {
 		
 		this.candidateDao.save(candidate);
 		return new SuccessResult(EnglishMessages.JOB_SEEKER_SUCCESS_ADDED);
+=======
+		if (!this.hasEmptyField(candidate)) {
+			return new ErrorResult("Tüm alanlar zorunludur.");
+		} else if(!this.mernisValidate (candidate.getIdentityNumber(), candidate.getFirstName(), candidate.getLastName(), candidate.getBirthOfDate().getYear())){
+
+            return new ErrorResult("Kimlik doğrulaması başarısız.");
+		} else {
+			this.candidateDao.save(candidate);
+			return new SuccessResult("iş arayan başarıyla kaydedildi.");
+		}
+>>>>>>> parent of 1292c57 (Validators,Son Ödev İsterler Eklendi,Ufak bir hata var)
 	}
 
 
@@ -70,7 +87,6 @@ public class CandidateManager implements CandidateService {
 		return new SuccessResult("Candidate is Updated");
 	}
 	
-	
 	@Override
 	public Result delete(int id) {
 		if(candidateDao.getOne(id) == null) {
@@ -80,18 +96,33 @@ public class CandidateManager implements CandidateService {
 		return new SuccessResult("Candidate is Deleted");
 	}
 	
-	
 	@Override
-	public boolean existsByIdentityNumber(String identityNumber) {
-		return this.candidateDao.existsByIdentityNumber(identityNumber);
+	public boolean existsCandidateByIdentityNumber(String identityNumber) {
+		return this.candidateDao.existsCandidateByIdentityNumber(identityNumber);
 	}
 
-	
 	@Override
-	public boolean existsByEmailAddress(String emailAddress) {
-		return this.candidateDao.existsByEmailAddress(emailAddress);
+	public boolean existsCandidateByEmailAddress(String emailAddress) {
+		return this.candidateDao.existsCandidateByEmailAddress(emailAddress);
 	}
+	
+	/* 
+	 * KPSPublicSoap kpsPublicSoap= new KPSPublicSoapProxy();
+	 * return kpsPublicSoap.TCKimlikNoDogrula(candidate.getIdentityNumber(), candidate.getFirstName().toUpperCase(), candidate.getLastName().toUpperCase(), candidate.getBirthOfDate());
+	
+	 */
 
-}
+	@Override
+	public boolean hasEmptyField(Candidate candidate) {
+//		if (candidate.getFirstName().isEmpty() || candidate.getLastName().isEmpty() || candidate.getBirthOfDate() || candidate.getEmailAddress().isEmpty() 
+//				|| candidate.getIdentityNumber().isEmpty() || candidate.getPassword().isEmpty()) {
+//			return false;
+//		} else {
+			return true;
+		}
+	private boolean mernisValidate(String tckNo,String firstName, String lastName, int yearOfDate) {
+        return true;
+    }
+	}
 
 

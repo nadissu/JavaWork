@@ -2,17 +2,17 @@ package  HMRS.hmrs.business.concretes;
 
 import java.util.List;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import HMRS.hmrs.business.abstracts.EmployerService;
-import HMRS.hmrs.core.utilities.constants.EnglishMessages;
-import HMRS.hmrs.core.utilities.results.DataResult;
-import HMRS.hmrs.core.utilities.results.ErrorDataResult;
-import HMRS.hmrs.core.utilities.results.ErrorResult;
-import HMRS.hmrs.core.utilities.results.Result;
-import HMRS.hmrs.core.utilities.results.SuccessDataResult;
-import HMRS.hmrs.core.utilities.results.SuccessResult;
-import HMRS.hmrs.core.validators.EmployerValidator;
+import HMRS.hmrs.core.utilities.DataResult;
+import HMRS.hmrs.core.utilities.ErrorDataResult;
+import HMRS.hmrs.core.utilities.ErrorResult;
+import HMRS.hmrs.core.utilities.Result;
+import HMRS.hmrs.core.utilities.SuccessDataResult;
+import HMRS.hmrs.core.utilities.SuccessResult;
 import HMRS.hmrs.dataAccess.abstracts.EmployerDao;
 import HMRS.hmrs.entities.concretes.Employer;
 import lombok.NoArgsConstructor;
@@ -21,20 +21,21 @@ import lombok.NoArgsConstructor;
 @Service
 public class EmployerManager implements EmployerService {
 	
-	
+	@Autowired
 	private EmployerDao employerDao;
-	private EmployerValidator employerValidator;
+	Employer employerDb = new Employer();
 	
 
 	@Override
 	public DataResult<List<Employer>> getAll() {
-		return new SuccessDataResult<List<Employer>>(this.employerDao.findAll(), "Employer are Listed");
+		return new SuccessDataResult<List<Employer>>("Employer are Listed", this.employerDao.findAll());
 	}
 	
 	@Override
 	public DataResult<Employer> getById(int id) {
 		if (this.employerDao.findById(id).orElse(null) != null) {
-			return new SuccessDataResult<Employer>(this.employerDao.findById(id).get(),"Belirtilen iş pozisyonu başarıyla bulundu.");
+			return new SuccessDataResult<Employer>("Belirtilen iş pozisyonu başarıyla bulundu.",
+					this.employerDao.findById(id).get());
 		} else {
 			return new ErrorDataResult<Employer>("Belirtilen iş pozisyonu mevcut değildir.");
 		}
@@ -43,13 +44,21 @@ public class EmployerManager implements EmployerService {
 
 	@Override
 	public Result add(Employer employer) {
-		this.employerValidator = new EmployerValidator(employer, employerDao);
-		Result result = employerValidator.isValid();
-		if( result instanceof ErrorResult)
-			return result;
-	
-		this.employerDao.save(employer);
-		return new SuccessResult(EnglishMessages.EMPLOYER_SUCCESS_ADDED);
+		if (this.hasEmptyField(employer)) {
+			return new ErrorResult("Tüm alanlar zorunludur.");
+		} /* else if (!this.employerEmailRegexValidatorService.isValidEmail(employer.getEmail(),
+				employer.getWebSite())) {
+			return new ErrorResult("Email, web site ile aynı domain'e sahip olmalıdır.");
+		} else if (this.existsEmployerByEmail(employer.getEmail())) {
+			return new ErrorResult("Bu email'e sahip bir işveren kaydı mevcuttur.");
+		} else if (!this.employerEmailVerifyService.hasVerifyEmail(employer.getEmail())) {
+			return new ErrorResult("Email doğrulanmadı!");
+		} else if (!this.employerSystemEmployeeVerifyService.hasVerifyBySystemEmployee(employer)) {
+			return new ErrorResult("Sistem tarafından doğrulanmadı!");
+		} */ else {
+			this.employerDao.save(employer);
+			return new SuccessResult("İşveren başarıyla kaydedildi.");
+		}
 	}
 
 
@@ -72,13 +81,16 @@ public class EmployerManager implements EmployerService {
 	}
 	
 	@Override
-	public boolean existsByEmailAddress(String emailAddress) {
-		return this.employerDao.existsByEmailAddress(emailAddress);
+	public boolean existsEmployerByEmailAddress(String emailAddress) {
+		return this.employerDao.existsEmployerByEmailAddress(emailAddress);
 	}
-	
+
 	@Override
-	public DataResult<Employer> getByCompanyName(String companyName) {
-		
-		return new SuccessDataResult<Employer>(this.employerDao.getByCompanyName(companyName));
+	public boolean hasEmptyField(Employer employer) {
+		if (employer.getCompanyName().isEmpty() || employer.getWebAddress().isEmpty() || employer.getEmailAddress().isEmpty() || employer.getPassword().isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
