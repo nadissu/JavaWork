@@ -19,22 +19,19 @@ import HMRS.hmrs.core.validators.CandidateValidator;
 import HMRS.hmrs.dataAccess.abstracts.CandidateDao;
 import HMRS.hmrs.entities.concretes.Candidate;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@NoArgsConstructor
+
 @Service
+@RequiredArgsConstructor
 public class CandidateManager implements CandidateService {
 	
-	private CandidateDao candidateDao;
-	private MernisServiceAdapter mernisServiceAdapter;
-	private CandidateValidator candidateValidator;
-	
-	@Autowired
-	public CandidateManager(CandidateDao candidateDao, MernisServiceAdapter mernisServiceAdapter) {
-		super();
-		this.candidateDao = candidateDao;
-		this.mernisServiceAdapter = mernisServiceAdapter;
-	}
-	
+	private final CandidateDao candidateDao;
+//	private final MernisServiceAdapter mernisServiceAdapter;
+//	private  CandidateValidator candidateValidator;
+//	
+
+
 
 	@Override
 	public DataResult<List<Candidate>> getAll() {
@@ -54,10 +51,10 @@ public class CandidateManager implements CandidateService {
 
 	@Override
 	public Result add(Candidate candidate) {
-		this.candidateValidator = new CandidateValidator(candidate, candidateDao, mernisServiceAdapter);
-		Result result = candidateValidator.isValid();
-		if( result instanceof ErrorResult)
-			return result;
+//		this.candidateValidator = new CandidateValidator(candidate, candidateDao, mernisServiceAdapter);
+//		Result result = candidateValidator.isValid();
+//		if( result instanceof ErrorResult)
+//			return result;
 		
 		this.candidateDao.save(candidate);
 		return new SuccessResult(EnglishMessages.JOB_SEEKER_SUCCESS_ADDED);

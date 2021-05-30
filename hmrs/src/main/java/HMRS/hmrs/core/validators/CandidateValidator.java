@@ -1,5 +1,7 @@
 package HMRS.hmrs.core.validators;
 
+import org.springframework.stereotype.Service;
+
 import HMRS.hmrs.core.adapters.abstracts.MernisServiceAdapter;
 import HMRS.hmrs.core.utilities.constants.EnglishMessages;
 import HMRS.hmrs.core.utilities.results.ErrorResult;
@@ -7,7 +9,7 @@ import HMRS.hmrs.core.utilities.results.Result;
 import HMRS.hmrs.core.utilities.results.SuccessResult;
 import HMRS.hmrs.dataAccess.abstracts.CandidateDao;
 import HMRS.hmrs.entities.concretes.Candidate;
-
+@Service
 public class CandidateValidator {
 	private Candidate candidate;
 	private CandidateDao candidateDao;

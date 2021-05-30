@@ -10,8 +10,8 @@ import tr.gov.nvi.tckimlik.WS.KPSPublicSoap;
 import tr.gov.nvi.tckimlik.WS.KPSPublicSoapProxy;
 
 @Component
-public class MernisAdapter implements MernisServiceAdapter{
-
+public class MernisAdapter {
+	/*
 	@Override
 	public boolean checkIfRealPerson(Candidate candidate) {
 		KPSPublicSoap client=new KPSPublicSoapProxy();
@@ -26,6 +26,6 @@ public class MernisAdapter implements MernisServiceAdapter{
             e.printStackTrace();
         }
         return result;
-	}
+	}*/
 
 }
