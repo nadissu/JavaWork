@@ -1,53 +1,42 @@
 package HMRS.hmrs.entities.concretes;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import HMRS.hmrs.entities.abstracts.User;
-
-@Data
-@Entity
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="employers")
-@EqualsAndHashCode(callSuper = false)
-@PrimaryKeyJoinColumn(name = "id")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "jobAdvertisements"})
-public class Employer extends User {
-
-	private static final long serialVersionUID = 1L;
+@Data
+@Entity
+@Table(name="employer_users")
+@PrimaryKeyJoinColumn(name="user_id")
+public class Employer extends User{
 	
-	@Column(name = "company_name", nullable = false, unique = true)
-    private String companyName;
-
-    @Column(name = "web_address", nullable = false, unique = true)
-    private String webAddress;
-    
-    @OneToMany(mappedBy="employer",fetch = FetchType.LAZY)
-	private List<JobAdvertisement> jobAdvertisements;
-    
-    public Employer(int id, String emailAddress, String password, String companyName, String webAddress) {
-    	super(id, emailAddress, password);
-    	this.companyName = companyName;
-    	this.webAddress = webAddress;
-    }
-    
-    public Employer(String emailAddress, String password, String companyName, String webAddress) {
-    	super(emailAddress, password);
-    	this.companyName = companyName;
-    	this.webAddress = webAddress;
-    }
-
+	@NotBlank(message="Şirket İsmi Alanı Boş Olamaz")
+	@Column(name="company_name")
+	private String companyName;
+	
+	@NotBlank(message="Web Sitesi Alanı Boş Olamaz")
+	@Column(name="web_address")
+	private String webAddress;
+	
+	
+	@NotBlank(message="Telefon Numarası Alanı Boş Olamaz")
+	@Column(name="phone_number")
+	private String phoneNumber;
+	
+	@JsonIgnore
+	@Column(name="user_confirm")
+	private boolean userConfirm;
+	
+	
 }

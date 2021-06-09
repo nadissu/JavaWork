@@ -1,88 +1,35 @@
-package  HMRS.hmrs.business.concretes;
-
+package HMRS.hmrs.business.concretes;
 import java.util.List;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import HMRS.hmrs.business.abstracts.CandidateService;
-import HMRS.hmrs.core.adapters.abstracts.MernisServiceAdapter;
-import HMRS.hmrs.core.utilities.constants.EnglishMessages;
+import HMRS.hmrs.business.abstracts.FieldService;
 import HMRS.hmrs.core.utilities.results.DataResult;
-import HMRS.hmrs.core.utilities.results.ErrorDataResult;
-import HMRS.hmrs.core.utilities.results.ErrorResult;
 import HMRS.hmrs.core.utilities.results.Result;
-import HMRS.hmrs.core.utilities.results.SuccessDataResult;
-import HMRS.hmrs.core.utilities.results.SuccessResult;
-import HMRS.hmrs.core.validators.CandidateValidator;
-import HMRS.hmrs.dataAccess.abstracts.CandidateDao;
 import HMRS.hmrs.entities.concretes.Candidate;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Service
-public class CandidateManager implements CandidateService {
+public class CandidateManager implements CandidateService{
+
+	private FieldService<Candidate> controllerService;
+		
+		
 	@Autowired
-	private CandidateDao candidateDao;
-
-	
-
+	public CandidateManager(FieldService<Candidate> controllerService) {
+		super();
+		this.controllerService = controllerService;
+		
+	}
 
 	@Override
 	public DataResult<List<Candidate>> getAll() {
-		return new SuccessDataResult<List<Candidate>>(this.candidateDao.findAll(), EnglishMessages.JOB_SEEKER_SUCCESS_DATA_LISTED);
+		return this.controllerService.getAll();
 	}
-	
-	
+		
 	@Override
-	public DataResult<Candidate> getById(int id) {
-		if (this.candidateDao.findById(id).orElse(null) != null ) {
-			return new SuccessDataResult<Candidate>(this.candidateDao.findById(id).get(), "The id already existed");
-		} else {
-			return new ErrorDataResult<Candidate>("The id did not exist.");
-		}
-	}
-
-
-	@Override
-	public Result add(Candidate candidate) {
-		this.candidateDao.save(candidate);
-		return new SuccessResult(EnglishMessages.JOB_SEEKER_SUCCESS_ADDED);
-	}
-
-
-	@Override
-	public Result update(int id, Candidate candidate) {
-		if(candidateDao.getOne(id) == null) {
-			return new ErrorResult("User Does not Exist");
-		}	
-		candidateDao.save(candidate);
-		return new SuccessResult("Candidate is Updated");
-	}
-	
-	
-	@Override
-	public Result delete(int id) {
-		if(candidateDao.getOne(id) == null) {
-			return new ErrorResult("Id of Candidate is Null");
-		}
-		candidateDao.deleteById(id);
-		return new SuccessResult("Candidate is Deleted");
-	}
-	
-	
-	@Override
-	public boolean existsByIdentityNumber(String identityNumber) {
-		return this.candidateDao.existsByIdentityNumber(identityNumber);
+	public Result add(Candidate newCandidate) {
+		return this.controllerService.verifyData(newCandidate);	
 	}
 
 	
-	@Override
-	public boolean existsByEmailAddress(String emailAddress) {
-		return this.candidateDao.existsByEmailAddress(emailAddress);
-	}
-
 }
-
-

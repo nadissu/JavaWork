@@ -1,31 +1,31 @@
 package HMRS.hmrs.core.adapters.concretes;
-
 import java.rmi.RemoteException;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import HMRS.hmrs.core.adapters.abstracts.MernisServiceAdapter;
+import HMRS.hmrs.core.adapters.abstracts.VerifyApiService;
 import HMRS.hmrs.entities.concretes.Candidate;
-import tr.gov.nvi.tckimlik.WS.KPSPublicSoap;
 import tr.gov.nvi.tckimlik.WS.KPSPublicSoapProxy;
 
-@Component
-public class MernisAdapter implements MernisServiceAdapter{
+@Service
+public class MernisAdapter implements VerifyApiService<Candidate>{
+	
 
 	@Override
-	public boolean checkIfRealPerson(Candidate candidate) {
-		KPSPublicSoap client=new KPSPublicSoapProxy();
-        boolean result=false;
-        try {
-            result=client.TCKimlikNoDogrula(
-                        Long.valueOf(candidate.getIdentityNumber()), 
-                        candidate.getFirstName().toUpperCase(), 
-                        candidate.getLastName().toUpperCase(), 
-                        candidate.getBirthOfDate().getYear());
-        }  catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        return result;
+	public boolean ApiControl(Candidate candidate) {
+		KPSPublicSoapProxy kpsPublic;
+		try {
+			kpsPublic = new KPSPublicSoapProxy();
+			boolean durum = kpsPublic.TCKimlikNoDogrula(
+					Long.parseLong(candidate.getNationalIdentity()), 
+							candidate.getName().toUpperCase(), 
+							candidate.getSurname().toUpperCase(), 
+							Integer.parseInt(candidate.getBirth_year()));
+			return durum;
+		} catch (RemoteException | NumberFormatException e1) {
+			e1.printStackTrace();
+		}
+			return false;
 	}
 
 }

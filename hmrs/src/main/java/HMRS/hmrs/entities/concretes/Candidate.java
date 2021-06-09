@@ -1,57 +1,46 @@
 package HMRS.hmrs.entities.concretes;
-
-
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-import HMRS.hmrs.entities.abstracts.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
-
-@Data
-@Entity
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="candidates")
-@EqualsAndHashCode(callSuper = false)
-@PrimaryKeyJoinColumn(name = "id")
-public class Candidate  extends User{	
+@Data
+@Entity
+@Table(name="candidate_users")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Candidate extends User {
 	
-	private static final long serialVersionUID = 1L;
+	@NotBlank(message="İsim Alanı Boş olamaz")
+	@Size(min = 3, message = "İsim alanında en az 3 karakter kullanmanız gerekiyor") 
+	@Column(name="name")
+	private String name;
+	
+		
+	@NotBlank(message="Soyisim Alanı Boş olamaz")
+	@Column(name="surname")
+	private String surname;
+	
+	@NotBlank(message="TC Kimlik Numarası Alanı Boş Olamaz") 
+	@Size(min = 11, max=11, message = "TCKimlik No 11 hane olmalıdır")
+	@Column(name="national_identity")
+	private String nationalIdentity;
+	
+	@NotBlank(message="Doğum Yılı Alanı Boş Olamaz")
+	@Column(name="birth_year")
+	private String birth_year;
+	
+	
 
-	@Column(name="first_name", nullable = false)
-	private String firstName;
-	
-	@Column(name="last_name", nullable = false)
-	private String lastName;
-	
-	@Column(name="identification_number", nullable = false, unique = true)
-	private String identityNumber;
-	
-	@Column(name="birth_date", nullable = false)
-	private LocalDate  birthOfDate;
-	
-	public Candidate(int id, String emailAddress, String password, String firstName, String lastName, String identityNumber, LocalDate birthOfDate) {
-    	super(id, emailAddress, password);
-    	this.firstName = firstName;
-    	this.lastName = lastName;
-    	this.identityNumber = identityNumber;
-    	this.birthOfDate = birthOfDate;
-    }
-
-	public Candidate(String emailAddress, String password, String firstName, String lastName, String identityNumber, LocalDate birthOfDate) {
-    	super(emailAddress, password);
-    	this.firstName = firstName;
-    	this.lastName = lastName;
-    	this.identityNumber = identityNumber;
-    	this.birthOfDate = birthOfDate;
-    }
 }
